@@ -62,8 +62,9 @@ class Main(Frame):
         self.view_records()
 
     def del_acc(self):
+        values = self.tree.set(self.tree.selection()[0], "#1")
         self.db.c.execute('DELETE FROM account WHERE id=?',
-                                self.tree.set(self.tree.selection()[0], "#1"))
+                                    values.split())
         self.db.conn.commit()
         self.view_records()
 
