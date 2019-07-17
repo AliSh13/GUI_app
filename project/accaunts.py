@@ -209,7 +209,7 @@ class Update(Child):
 
 class DB():
     def __init__(self):
-        self.conn = sqlite3.connect('acc.db')
+        self.conn = sqlite3.connect('project/acc.db')
         self.c = self.conn.cursor()
         self.c.execute(
                 '''CREATE TABLE IF NOT EXISTS account(id integer primary key,
