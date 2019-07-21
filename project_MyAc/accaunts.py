@@ -4,6 +4,7 @@ import sqlite3
 from create_pas import *
 
 class Main(Frame):
+    '''основное окно приложения'''
     def __init__(self, root, db):
         super().__init__(root)
         self.init_main()
@@ -49,10 +50,12 @@ class Main(Frame):
         self.tree.pack(side=LEFT)
 
     def records(self, name, password, email, app):
+        """функция добавления новой записи """
         self.db.insert_data(name, password, email, app)
         self.view_records()
 
     def update_records(self, name, password, email, app):
+        '''функция редактирования выбранной записи '''
         self.db.c.execute('UPDATE account SET name=?, password=?, email=?, app=? WHERE id=?',
                             ( name, password, email, app,
                             self.tree.set(self.tree.selection()[0], '#1'))
@@ -61,24 +64,28 @@ class Main(Frame):
         self.view_records()
 
     def del_acc(self):
-        values = self.tree.set(self.tree.selection()[0], "#1")
+        '''удаление выбранной записи '''
+        value = self.tree.set(self.tree.selection()[0], "#1")
         self.db.c.execute('DELETE FROM account WHERE id=?',
-                                    values.split())
+                                    value.split())
         self.db.conn.commit()
         self.view_records()
 
     def clear(self):
+        '''полное удаление данных '''
         self.db.c.execute('DELETE FROM account')
         self.db.conn.commit()
         self.view_records()
 
     def view_records(self):
+        '''функия выводит все данные с бд '''
         self.db.c.execute('SELECT * FROM account')
         [self.tree.delete(i) for i in self.tree.get_children()]
         [self.tree.insert('', 'end', values = row) for row in self.db.c.fetchall()]
 
 
 class Child(Toplevel):
+    ''' окно создания новой записи '''
     def __init__(self):
         super().__init__(root)
         self.init_child()
@@ -129,6 +136,7 @@ class Child(Toplevel):
         self.create_pass.place(x=105, y=210)
 
 class CreatePassword(Toplevel):
+    '''окно генерации пароля '''
         def __init__(self):
             super().__init__(root)
             self.init_create()
@@ -173,6 +181,7 @@ class CreatePassword(Toplevel):
             self.create.place(x=90, y=90)
 
         def choice(self,entry, len_pass, var):
+            ''' функция генерации пароля по заданным критериям '''
             len_pass = int(len_pass)
 
             if var == 0:
@@ -185,6 +194,7 @@ class CreatePassword(Toplevel):
 
 
 class Update(Child):
+    '''обновление уже имеющейся записи '''
     def __init__(self):
         super().__init__()
         self.init_edit()
@@ -208,6 +218,7 @@ class Update(Child):
 
 
 class DB():
+    '''создание бд '''
     def __init__(self):
         self.conn = sqlite3.connect('project_MyAc/acc.db')
         self.c = self.conn.cursor()
