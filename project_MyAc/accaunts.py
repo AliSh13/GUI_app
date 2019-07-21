@@ -230,6 +230,6 @@ if __name__ == "__main__":
     appl = Main(root, db)
     root.geometry("650x400")
     root.resizable(width=False, height=False)
-    __version__="0.0.1 Beta"
+    __version__="1"
     root.title("MyAcc " + __version__)
     root.mainloop()
